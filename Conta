@@ -1,0 +1,157 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class ContaCorrente {
+    private String titular;
+    private String agencia;
+    private String numero;
+    private List<Operacao> operacoes = new ArrayList<>();
+
+    // Construtor vazio
+    public ContaCorrente() {}
+
+    // Construtor completo
+    public ContaCorrente(String titular, String agencia, String numero) {
+        this.titular = titular;
+        this.agencia = agencia;
+        this.numero = numero;
+    }
+
+    // Getters e Setters
+    public String getTitular() {
+        return titular;
+    }
+
+    public void setTitular(String titular) {
+        this.titular = titular;
+    }
+
+    public String getAgencia() {
+        return agencia;
+    }
+
+    public void setAgencia(String agencia) {
+        this.agencia = agencia;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    public List<Operacao> getOperacoes() {
+        return operacoes;
+    }
+
+    // ---------- Métodos solicitados ----------
+    public void adicionarOperacao(String categoria, String descricao, Double valor) {
+        if (categoria == null || categoria.trim().isEmpty()) return;
+        if (descricao == null || descricao.trim().isEmpty()) return;
+        if (valor == null || valor == 0) return;
+
+        Operacao op = new Operacao(categoria, descricao, valor);
+        operacoes.add(op);
+    }
+
+    public List<Operacao> buscarOperacoesPorCategoria(String categoria) {
+        List<Operacao> resultado = new ArrayList<>();
+        if (categoria == null) return resultado;
+
+        for (int i = 0; i < operacoes.size(); i++) {
+            Operacao op = operacoes.get(i);
+            if (op.getCategoria() != null &&
+                op.getCategoria().equalsIgnoreCase(categoria)) {
+                resultado.add(op);
+            }
+        }
+        return resultado;
+    }
+
+    public List<Operacao> buscarOperacoesPorValor(Double valor) {
+        List<Operacao> resultado = new ArrayList<>();
+        if (valor == null) return resultado;
+
+        for (int i = 0; i < operacoes.size(); i++) {
+            Operacao op = operacoes.get(i);
+            if (valor.equals(op.getValor())) {
+                resultado.add(op);
+            }
+        }
+        return resultado;
+    }
+
+    public List<Operacao> buscarOperacoesSaida() {
+        List<Operacao> resultado = new ArrayList<>();
+        for (int i = 0; i < operacoes.size(); i++) {
+            Operacao op = operacoes.get(i);
+            if (op.getValor() != null && op.getValor() < 0) {
+                resultado.add(op);
+            }
+        }
+        return resultado;
+    }
+
+    public List<Operacao> buscarOperacoesEntrada() {
+        List<Operacao> resultado = new ArrayList<>();
+        for (int i = 0; i < operacoes.size(); i++) {
+            Operacao op = operacoes.get(i);
+            if (op.getValor() != null && op.getValor() > 0) {
+                resultado.add(op);
+            }
+        }
+        return resultado;
+    }
+
+    public List<Operacao> buscarOperacoesPorDescricao(String descricao) {
+        List<Operacao> resultado = new ArrayList<>();
+        if (descricao == null) return resultado;
+
+        for (int i = 0; i < operacoes.size(); i++) {
+            Operacao op = operacoes.get(i);
+            if (op.getDescricao() != null &&
+                op.getDescricao().toLowerCase().contains(descricao.toLowerCase())) {
+                resultado.add(op);
+            }
+        }
+        return resultado;
+    }
+
+    public Double buscarMaiorValor() {
+        if (operacoes.isEmpty()) return 0.0;
+        Double maior = operacoes.get(0).getValor();
+
+        for (int i = 1; i < operacoes.size(); i++) {
+            Operacao op = operacoes.get(i);
+            if (op.getValor() > maior) {
+                maior = op.getValor();
+            }
+        }
+        return maior;
+    }
+
+    public Double buscarMenorValor() {
+        if (operacoes.isEmpty()) return 0.0;
+        Double menor = operacoes.get(0).getValor();
+
+        for (int i = 1; i < operacoes.size(); i++) {
+            Operacao op = operacoes.get(i);
+            if (op.getValor() < menor) {
+                menor = op.getValor();
+            }
+        }
+        return menor;
+    }
+
+    public Double obterSaldo() {
+        if (operacoes.isEmpty()) return 0.0;
+        Double saldo = 0.0;
+
+        for (int i = 0; i < operacoes.size(); i++) {
+            saldo += operacoes.get(i).getValor();
+        }
+        return saldo;
+    }
+}
